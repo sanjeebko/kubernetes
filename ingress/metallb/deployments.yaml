@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+  labels:
+    app.kubernates.io/name: web-app
+    name:  web-app
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernates.io/name: web-app     
+  template:
+    metadata:
+      labels:
+        app.kubernates.io/name: web-app
+    spec:
+      containers:
+      - name: nginxcontainer
+        image: nginx:latest
+        command: 
+          - /bin/sh
+          - -c
+          - "echo 'welcome to my webapp. [metallb]' > /usr/share/nginx/html/index.html && nginx -g 'daemon off;'"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 80
+      dnsConfig:
+          options: 
+            - name: ndots
+              value: "2"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+  labels:
+    app.kubernates.io/name: web-app
+spec:
+  selector:
+    app.kubernates.io/name: web-app
+  ports:
+  - port: 80
+    protocol: TCP
+    name: http
+    targetPort: 80

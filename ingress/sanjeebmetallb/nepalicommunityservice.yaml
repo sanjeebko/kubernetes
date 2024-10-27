@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nepali-community-service
+  labels:
+    app: nepali-community
+spec:
+  selector:
+    app: blazor-app
+  ports:
+  - port: 80
+    protocol: TCP
+    name: http
+    targetPort: 8081
+  type: LoadBalancer

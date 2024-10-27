@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blazordeployment
+  labels:
+    name:  blazordeployment
+spec:
+  replicas: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      name: blazorpod       
+  template:
+    metadata:
+      name: blazorpod
+      labels:
+        name: blazorpod
+    spec:
+      containers:
+      - name: blazorpod
+        image: sanjeebojha/sanjeeb:8.0.6-amd64
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "700m"
+        ports:
+          - containerPort: 80

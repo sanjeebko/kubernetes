@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: blazorpod
+  labels:
+    name: blazorpod
+spec:
+  containers:
+  - name: blazorpod
+    image: sanjeebojha/sanjeeb:8.0.6-amd84
+    resources:
+      limits:
+        memory: "500Mi"
+        cpu: "700m"
+    ports:
+      - containerPort: 80
